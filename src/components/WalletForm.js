@@ -1,50 +1,140 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { successFetch } from '../redux/actions';
+import { getCurrencies, addExpense } from '../redux/actions';
 
 class WalletForm extends Component {
+  state = {
+    id: 0,
+    value: 0,
+    description: '',
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Alimentação',
+    exchangeRates: [],
+  };
+
   async componentDidMount() {
-    await this.getCurrencies();
+    await this.fetchApi();
   }
 
-  getCurrencies = async () => {
+  removeUSDT = (dataKeys) => {
     const { dispatch } = this.props;
+    const removedUSDT = dataKeys.filter((currency) => currency !== 'USDT');
+
+    dispatch(getCurrencies(removedUSDT));
+  };
+
+  turnToInitialState = () => {
+    this.setState((prevState) => ({
+      id: prevState.id + 1,
+      value: 0,
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+      exchangeRates: [],
+    }));
+  };
+
+  fetchApi = async () => {
     const API = 'https://economia.awesomeapi.com.br/json/all';
     const data = await fetch(API)
       .then((response) => response.json());
+
     const dataKeys = Object.keys(await data);
-    const removedUSDT = dataKeys.filter((currency) => currency !== 'USDT');
-    dispatch(successFetch(removedUSDT));
+    // const dataValues = Object.values(await data);
+
+    this.removeUSDT(dataKeys);
+    console.log(data);
+    // const priceNow = dataValues.reduce((acc, fetchData) => ({
+    //   ...acc,
+    //   [fetchData.code]: fetchData,
+    // }), {});
+    return data;
+  };
+
+  handleChange = async ({ target }) => {
+    this.setState({
+      [target.name]: target.value,
+    });
+  };
+
+  handleAddExpense = async () => {
+    const exchangeRates = await this.fetchApi();
+    const { dispatch } = this.props;
+    this.setState((state) => ({
+      id: state.id,
+      exchangeRates,
+    }), () => {
+      dispatch(addExpense(this.state));
+      this.turnToInitialState();
+    });
   };
 
   render() {
+    const { value, description, currency, method, tag } = this.state;
     const { currencies } = this.props;
-    const options = currencies.map((currency, index) => (
-      <option key={ index } value={ currency }>
-        { currency }
+    const options = currencies.map((curr, index) => (
+      <option key={ index } value={ curr }>
+        { curr }
       </option>
     ));
 
     return (
       <div>
-        <h4 data-testid="value-input">valor da despesa</h4>
-        <p data-testid="description-input">descrição da despesa</p>
-        <select name="currency" data-testid="currency-input">
+        <label htmlFor="value-input">
+          valor
+          <input
+            data-testid="value-input"
+            id="value-input"
+            name="value"
+            onChange={ this.handleChange }
+            value={ value }
+          />
+        </label>
+        <label htmlFor="description-input">
+          descrição
+          <input
+            type="text"
+            data-testid="description-input"
+            id="description-input"
+            name="description"
+            onChange={ this.handleChange }
+            value={ description }
+          />
+        </label>
+        <select
+          name="currency"
+          data-testid="currency-input"
+          onChange={ this.handleChange }
+          value={ currency }
+        >
           {currencies && options}
         </select>
-        <select name="paymentMethod" data-testid="method-input">
+        <select
+          name="method"
+          data-testid="method-input"
+          onChange={ this.handleChange }
+          value={ method }
+        >
           <option value="dinheiro">Dinheiro</option>
           <option value="cartao-credito">Cartão de crédito</option>
           <option value="cartao-debito">Cartão de débito</option>
         </select>
-        <select name="expenseCategory" data-testid="tag-input">
+        <select
+          name="tag"
+          data-testid="tag-input"
+          onChange={ this.handleChange }
+          value={ tag }
+        >
           <option value="alimentacao">Alimentação</option>
           <option value="lazer">Lazer</option>
           <option value="trabalho">Trabalho</option>
           <option value="transporte">Transporte</option>
           <option value="saude">Saúde</option>
         </select>
+        <button onClick={ this.handleAddExpense }>Adicionar despesa</button>
       </div>
     );
   }
@@ -52,11 +142,12 @@ class WalletForm extends Component {
 
 WalletForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  currencies: PropTypes.arrayOf().isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  price: state.wallet.price,
 });
 
 export default connect(mapStateToProps)(WalletForm);
