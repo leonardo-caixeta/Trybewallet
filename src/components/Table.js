@@ -3,9 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Table extends Component {
+  deleteTask = () => {
+    // const taskItems = this.tableItems();
+    // const
+  };
+
+  editTask = () => {};
+
   tableItems = () => {
     const { expenses } = this.props;
-    return expenses.map((data) => {
+    return expenses.map((data, index) => {
       const exchangeRatesValues = Object.values(data.exchangeRates);
       const currencyRate = exchangeRatesValues
         .find(({ code }) => code === data.currency);
@@ -24,7 +31,24 @@ class Table extends Component {
           <td>{ exchange }</td>
           <td>{ total }</td>
           <td>Real</td>
-          <td>Editar/Excluir</td>
+          <td>
+            <button
+              data-testid="delete-btn"
+              value={ index }
+              onClick={ this.deleteTask }
+            >
+              Deletar
+            </button>
+          </td>
+          <td>
+            <button
+              data-testid="edit-btn"
+              value={ index }
+              onClick={ this.editTask }
+            >
+              Deletar
+            </button>
+          </td>
         </tr>
       );
       return res;
