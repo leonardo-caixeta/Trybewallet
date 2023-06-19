@@ -5,12 +5,12 @@ import { getCurrencies, addExpense } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
-    id: 0,
     value: '',
-    description: '',
     currency: 'USD',
     method: 'Dinheiro',
     tag: 'Alimentação',
+    description: '',
+    id: 0,
     exchangeRates: [],
   };
 
@@ -27,12 +27,12 @@ class WalletForm extends Component {
 
   turnToInitialState = () => {
     this.setState((prevState) => ({
-      id: prevState.id + 1,
       value: '',
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
       tag: 'Alimentação',
+      id: prevState.id + 1,
       exchangeRates: [],
     }));
   };
@@ -112,9 +112,9 @@ class WalletForm extends Component {
           onChange={ this.handleChange }
           value={ method }
         >
-          <option value="dinheiro">Dinheiro</option>
-          <option value="cartao-credito">Cartão de crédito</option>
-          <option value="cartao-debito">Cartão de débito</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de crédito">Cartão de crédito</option>
+          <option value="Cartão de débito">Cartão de débito</option>
         </select>
         <select
           name="tag"
@@ -122,11 +122,11 @@ class WalletForm extends Component {
           onChange={ this.handleChange }
           value={ tag }
         >
-          <option value="alimentacao">Alimentação</option>
-          <option value="lazer">Lazer</option>
-          <option value="trabalho">Trabalho</option>
-          <option value="transporte">Transporte</option>
-          <option value="saude">Saúde</option>
+          <option value="Alimentacao">Alimentação</option>
+          <option value="Lazer">Lazer</option>
+          <option value="Trabalho">Trabalho</option>
+          <option value="Transporte">Transporte</option>
+          <option value="Saúde">Saúde</option>
         </select>
         <button onClick={ this.handleAddExpense }>Adicionar despesa</button>
       </div>
