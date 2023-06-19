@@ -6,7 +6,7 @@ import { getCurrencies, addExpense } from '../redux/actions';
 class WalletForm extends Component {
   state = {
     id: 0,
-    value: 0,
+    value: '',
     description: '',
     currency: 'USD',
     method: 'Dinheiro',
@@ -28,7 +28,7 @@ class WalletForm extends Component {
   turnToInitialState = () => {
     this.setState((prevState) => ({
       id: prevState.id + 1,
-      value: 0,
+      value: '',
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
@@ -43,14 +43,8 @@ class WalletForm extends Component {
       .then((response) => response.json());
 
     const dataKeys = Object.keys(await data);
-    // const dataValues = Object.values(await data);
 
     this.removeUSDT(dataKeys);
-    console.log(data);
-    // const priceNow = dataValues.reduce((acc, fetchData) => ({
-    //   ...acc,
-    //   [fetchData.code]: fetchData,
-    // }), {});
     return data;
   };
 
