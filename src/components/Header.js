@@ -19,6 +19,7 @@ class Header extends React.Component {
       }, 0);
       return total.toFixed(2);
     }
+    return 0;
   };
 
   render() {

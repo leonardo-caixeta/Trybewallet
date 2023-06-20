@@ -46,7 +46,7 @@ class Table extends Component {
               value={ index }
               onClick={ this.editTask }
             >
-              Deletar
+              Editar
             </button>
           </td>
         </tr>
