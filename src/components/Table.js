@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { removeExpense } from '../redux/actions';
 
 class Table extends Component {
-  deleteTask = () => {
-    // const taskItems = this.tableItems();
-    // const
-  };
-
   editTask = () => {};
 
   tableItems = () => {
-    const { expenses } = this.props;
+    const { expenses, dispatch } = this.props;
     return expenses.map((data, index) => {
       const exchangeRatesValues = Object.values(data.exchangeRates);
       const currencyRate = exchangeRatesValues
@@ -33,20 +29,18 @@ class Table extends Component {
           <td>Real</td>
           <td>
             <button
-              data-testid="delete-btn"
-              value={ index }
-              onClick={ this.deleteTask }
-            >
-              Deletar
-            </button>
-          </td>
-          <td>
-            <button
               data-testid="edit-btn"
               value={ index }
-              onClick={ this.editTask }
+              onClick={ () => this.editTask(data.id) }
             >
               Editar
+            </button>
+            <button
+              data-testid="delete-btn"
+              value={ index }
+              onClick={ () => dispatch(removeExpense(data.id)) }
+            >
+              Deletar
             </button>
           </td>
         </tr>
@@ -84,6 +78,7 @@ class Table extends Component {
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

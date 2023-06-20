@@ -9,17 +9,17 @@ class Header extends React.Component {
 
   toUpdateTotal = () => {
     const { expenses } = this.props;
+    let total = 0;
     if (expenses.length) {
       // const rates = expenses.map((i) => i.exchangeRates);
       // const value = expenses.map((v) => v.value);
-      const total = expenses.reduce((prev, curr, currIndex) => {
+      total = expenses.reduce((prev, curr, currIndex) => {
         const rate = expenses[currIndex]
           .exchangeRates[curr.currency].ask;
         return prev + (curr.value * rate);
       }, 0);
-      return total.toFixed(2);
     }
-    return 0;
+    return total.toFixed(2);
   };
 
   render() {
