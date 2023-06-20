@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { removeExpense } from '../redux/actions';
+import { removeExpense, startEdit } from '../redux/actions';
 
 class Table extends Component {
-  editTask = () => {};
-
   tableItems = () => {
     const { expenses, dispatch } = this.props;
-    return expenses.map((data, index) => {
+    return expenses.map((data) => {
       const exchangeRatesValues = Object.values(data.exchangeRates);
       const currencyRate = exchangeRatesValues
         .find(({ code }) => code === data.currency);
@@ -30,14 +28,12 @@ class Table extends Component {
           <td>
             <button
               data-testid="edit-btn"
-              value={ index }
-              onClick={ () => this.editTask(data.id) }
+              onClick={ () => dispatch(startEdit(data.id)) }
             >
               Editar
             </button>
             <button
               data-testid="delete-btn"
-              value={ index }
               onClick={ () => dispatch(removeExpense(data.id)) }
             >
               Deletar
