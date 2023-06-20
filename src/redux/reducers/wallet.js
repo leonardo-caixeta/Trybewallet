@@ -43,6 +43,7 @@ const wallet = (state = INITIAL_STATE, action) => {
       }
       return e;
     }),
+    expenseToEdit: null,
   };
 
   default: return { ...state };

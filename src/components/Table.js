@@ -64,7 +64,7 @@ class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            { expenses ? this.tableItems() : 'Nenhuma despesa foi adicionada' }
+            { expenses.length ? this.tableItems() : 'Nenhuma despesa foi adicionada' }
           </tbody>
         </table>
       </div>

@@ -65,6 +65,7 @@ class WalletForm extends Component {
     selectedExpense.method = method;
     selectedExpense.tag = tag;
     dispatch(editDone(selectedExpense));
+    this.turnToInitialState();
   };
 
   handleAddExpense = async () => {
